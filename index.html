@@ -1,0 +1,650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Marathon Plan</title>
+<meta name="description" content="22-week plan to a 9:00/mi marathon on April 17, 2027.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Marathon">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F3F5F8" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0E131A" media="(prefers-color-scheme: dark)">
+<style>
+/* Layout: app shell. Today card first, then the 22 weeks as check-off logs, reference sections below, tab bar pinned to the bottom */
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --ink:#141C28; --muted:#5A6576; --line:#DCE1E8;
+  --accent:#2343C4; --accent-soft:#E6EBFB;
+  --easy:#2F7A52; --easy-soft:#E2F1E8;
+  --mp:#2343C4; --mp-soft:#E6EBFB;
+  --work:#A65F06; --work-soft:#FBEFDC;
+  --long:#141C28; --long-soft:#E2E7EE;
+  --str:#6246A8; --str-soft:#EEE8F8;
+  --rest:#6E7888; --rest-soft:#EDEFF3;
+  --race:#B8322A; --race-soft:#FBE4E1;
+  --f-display:"Avenir Next Condensed","Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;
+  --f-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0E131A; --surface:#161D27; --ink:#E7EBF1; --muted:#9AA5B5; --line:#2A3443;
+    --accent:#8AA2FF; --accent-soft:#1E2850;
+    --easy:#74C997; --easy-soft:#183126;
+    --mp:#8AA2FF; --mp-soft:#1E2850;
+    --work:#EBAA45; --work-soft:#3A2A10;
+    --long:#E7EBF1; --long-soft:#28313F;
+    --str:#B39CF2; --str-soft:#2A2246;
+    --rest:#9AA5B5; --rest-soft:#1F2631;
+    --race:#F27A6E; --race-soft:#3D1D1A;
+    color-scheme:dark;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:980px;margin:0 auto;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:44px}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.2rem,9vw,3.6rem);text-transform:uppercase}
+h2{font-size:1.8rem;text-transform:uppercase}
+h3{font-size:1.3rem;text-transform:uppercase;letter-spacing:.02em}
+p{margin:0;max-width:68ch}
+.eyebrow{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.muted{color:var(--muted)}
+section{display:grid;gap:16px;scroll-margin-top:calc(12px + env(safe-area-inset-top,0px))}
+.sec-head{display:grid;gap:6px;border-top:2px solid var(--ink);padding-top:12px}
+a{color:var(--accent)}
+a:focus-visible,summary:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{display:grid;gap:14px}
+.specs{display:flex;flex-wrap:wrap;gap:8px 24px;margin:0;padding-top:12px;border-top:1px solid var(--line)}
+.specs div{display:grid}
+.specs dt{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.specs dd{margin:0;font-family:var(--f-display);font-size:1.5rem;font-weight:700;font-variant-numeric:tabular-nums}
+
+/* today */
+.today{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;display:grid;gap:12px;box-shadow:inset 4px 0 0 var(--accent)}
+.today h2{font-size:2rem}
+.today .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.today .next{border-top:1px dashed var(--line);padding-top:10px;display:grid;gap:4px}
+.bar{height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--accent);width:0}
+.btn{display:inline-block;font-family:var(--f-mono);font-size:.76rem;text-transform:uppercase;letter-spacing:.06em;text-decoration:none;color:var(--accent);border:1px solid var(--accent);border-radius:6px;padding:8px 12px}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.grid2>*{min-width:0}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:16px;display:grid;gap:10px;align-content:start}
+ul.list{margin:0;padding-left:1.1em;display:grid;gap:6px}
+
+/* chips */
+.chip{display:inline-block;font-family:var(--f-mono);font-size:.66rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:3px;white-space:nowrap}
+.t-easy{background:var(--easy-soft);color:var(--easy)}
+.t-opt{background:transparent;color:var(--easy);box-shadow:inset 0 0 0 1px var(--easy)}
+.t-mp{background:var(--mp-soft);color:var(--mp)}
+.t-q{background:var(--work-soft);color:var(--work)}
+.t-long{background:var(--long-soft);color:var(--long)}
+.t-str{background:var(--str-soft);color:var(--str)}
+.t-rest{background:var(--rest-soft);color:var(--rest)}
+.t-race{background:var(--race-soft);color:var(--race)}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
+.phase{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;display:grid;gap:4px;align-content:start}
+.phase .wk{font-family:var(--f-mono);font-size:.7rem;color:var(--muted);text-transform:uppercase}
+.phase p{font-size:.9rem;color:var(--muted)}
+
+/* weeks */
+.weeks{display:grid;gap:8px}
+details.week{background:var(--surface);border:1px solid var(--line);border-radius:8px;scroll-margin-top:calc(12px + env(safe-area-inset-top,0px))}
+details.week[open]{border-color:var(--muted)}
+details.week.current{box-shadow:inset 4px 0 0 var(--accent)}
+details.week summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:56px 1fr auto;gap:4px 12px;align-items:center;padding:12px 14px}
+details.week summary::-webkit-details-marker{display:none}
+.wnum{font-family:var(--f-display);font-weight:700;font-size:2rem;line-height:1;font-variant-numeric:tabular-nums}
+.wnum small{display:block;font-family:var(--f-mono);font-size:.56rem;letter-spacing:.1em;color:var(--muted);font-weight:400}
+.wmeta{display:grid;gap:2px;min-width:0}
+.wmeta .dates{font-weight:700}
+.wmeta .focus{color:var(--muted);font-size:.9rem}
+.wmiles{text-align:right;display:grid}
+.wmiles b{font-family:var(--f-display);font-size:1.4rem;font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1}
+.wmiles span{font-family:var(--f-mono);font-size:.64rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.wmiles .prog{color:var(--accent)}
+.wbody{border-top:1px solid var(--line);padding:4px 14px 14px;display:grid;gap:12px}
+.day{display:grid;grid-template-columns:76px 1fr auto;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:start}
+.day:last-child{border-bottom:0}
+.day.done .dtext{opacity:.5}
+.dlabel{font-family:var(--f-mono);font-size:.72rem;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.dlabel b{display:block;color:var(--ink);font-size:.8rem}
+.dtext{display:grid;gap:3px;min-width:0}
+.dtitle{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-weight:700}
+.ddetail{color:var(--muted);font-size:.92rem}
+.check{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin:-8px -6px -8px 0;cursor:pointer}
+.check input{width:24px;height:24px;margin:0;accent-color:var(--accent);cursor:pointer}
+.fuel{background:var(--bg);border-radius:6px;padding:12px;display:grid;gap:8px}
+.fuel-nums{display:flex;flex-wrap:wrap;gap:6px 22px}
+.fuel-nums div{display:grid}
+.fuel-nums span{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.fuel-nums b{font-family:var(--f-display);font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums}
+.fuel p{font-size:.93rem}
+.fuel p b{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:6px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+button{font:inherit;font-family:var(--f-mono);font-size:.74rem;text-transform:uppercase;letter-spacing:.06em;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:6px;padding:8px 12px;cursor:pointer}
+button.danger{color:var(--race);border-color:var(--race)}
+.note{font-size:.88rem;color:var(--muted)}
+footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:grid;gap:10px}
+
+/* tab bar */
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--surface);border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);padding-top:4px;padding-bottom:calc(4px + env(safe-area-inset-bottom,0px));padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+.tabbar a{text-align:center;font-family:var(--f-mono);font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-decoration:none;padding:12px 0}
+.tabbar a:active{color:var(--accent)}
+
+@media (max-width:560px){
+  details.week summary{grid-template-columns:48px 1fr}
+  .wmiles{grid-column:2;text-align:left;display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline}
+  .day{grid-template-columns:1fr auto;gap:4px 10px}
+  .dlabel{grid-column:1/-1}
+  .dlabel b{display:inline;margin-right:6px}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Marathon · Saturday, April 17, 2027</div>
+  <h1>26.2 at 9:00 a mile</h1>
+  <dl class="specs">
+    <div><dt>Goal finish</dt><dd>3:55:58</dd></div>
+    <div><dt>Goal pace</dt><dd>9:00 /mi</dd></div>
+    <div><dt>Peak week</dt><dd>35–40 mi</dd></div>
+    <div><dt>Longest run</dt><dd>20 mi ×2</dd></div>
+  </dl>
+</header>
+
+<section id="today" aria-live="polite"></section>
+
+<section id="weeks">
+  <div class="sec-head"><div class="eyebrow">22 weeks · tap a week to open it</div><h2>Week by week</h2></div>
+  <div class="legend" aria-label="Session types">
+    <span class="chip t-easy">Easy</span><span class="chip t-opt">Optional</span><span class="chip t-q">Workout</span><span class="chip t-mp">Marathon pace</span><span class="chip t-long">Long run</span><span class="chip t-str">Strength</span><span class="chip t-rest">Rest</span><span class="chip t-race">Race</span>
+  </div>
+  <div class="controls"><button type="button" id="openAll">Expand all</button><button type="button" id="closeAll">Collapse all</button></div>
+  <div class="weeks" id="weekList"></div>
+  <p class="note">Mileage is shown as "3 runs – 4 runs". Cutback weeks (6, 10, 14, 18) drop volume about 25%.</p>
+</section>
+
+<section id="start">
+  <div class="sec-head"><div class="eyebrow">Set your goal from real results</div><h2>Checkpoints</h2></div>
+  <p>Your long runs at 10:00–10:15 with HR 150–160 suggest current marathon fitness around 9:45–10:15 per mile. 9:00 is about 10% faster: ambitious, but reachable. Use these two races to decide.</p>
+  <div class="grid2">
+    <div class="panel">
+      <h3>1 · Nov 14 half</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Half time</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td class="num">≤ 1:56</td><td>On track. Follow the plan as written.</td></tr>
+          <tr><td class="num">1:56–2:05</td><td>9:00 is a stretch. Follow the plan; the tune-up decides.</td></tr>
+          <tr><td class="num">&gt; 2:05</td><td>Aim for 9:30 (4:09) for now. Add 15–20 s/mi to MP and tempo paces.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <h3>2 · Feb 20 tune-up</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Half time</th><th>Race-day target</th></tr></thead>
+        <tbody>
+          <tr><td class="num">≤ 1:50</td><td>9:00/mi (3:56). Go for it.</td></tr>
+          <tr><td class="num">1:50–1:54</td><td>9:05–9:15/mi (3:58–4:02). Push after mile 20 if strong.</td></tr>
+          <tr><td class="num">&gt; 1:54</td><td>9:20–9:30/mi (4:05–4:09). Use that as "goal pace" in weeks 15–22.</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+  <p class="note">No half on Feb 20? Any half from Feb 13–27 works, or a solo 13.1 time trial. A 10K also works: multiply your 10K time by about 4.8.</p>
+</section>
+
+<section id="paces">
+  <div class="sec-head"><div class="eyebrow">Intensity</div><h2>Paces &amp; heart rate</h2></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Zone</th><th>Wk 1–10</th><th>Wk 11–22</th><th>HR (est.)</th><th>Feel</th></tr></thead>
+    <tbody>
+      <tr><td><span class="chip t-easy">Easy &amp; long</span></td><td class="num">10:15–11:00</td><td class="num">10:00–10:45</td><td class="num">140–152</td><td>Full conversation. Most of your miles.</td></tr>
+      <tr><td><span class="chip t-mp">Marathon pace</span></td><td class="num">9:15–9:20</td><td class="num">9:00</td><td class="num">160–170</td><td>Steady, controlled. Short sentences.</td></tr>
+      <tr><td><span class="chip t-q">Tempo</span></td><td class="num">8:45</td><td class="num">8:25–8:30</td><td class="num">170–180</td><td>Comfortably hard. About 1-hour race effort.</td></tr>
+      <tr><td><span class="chip t-q">Interval</span></td><td class="num">8:05 (800 m ≈ 4:00)</td><td class="num">7:45 (800 m ≈ 3:52)</td><td class="num">178+</td><td>Hard. About 5K race effort.</td></tr>
+      <tr><td><span class="chip t-q">Strides / hills</span></td><td colspan="2">20–60 s, quick and relaxed, full recovery</td><td class="num">n/a</td><td>Fast but never strained.</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="list">
+    <li>HR ranges assume a max of about 191 (208 − 0.7 × age). If your watch has seen a higher max, shift them up.</li>
+    <li>Easy runs should be slower than your current long runs. Keeping HR under about 152 may mean 10:30–11:00 at first. That's intended.</li>
+    <li>Heat, wind and hills raise HR. On those days, run by effort and HR, not pace.</li>
+  </ul>
+</section>
+
+<section id="shape">
+  <div class="sec-head"><div class="eyebrow">Every week</div><h2>Weekly shape</h2></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Day</th><th>Session</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><b>Mon</b></td><td><span class="chip t-str">Strength A</span> Lower + core</td><td>Stronger hips, calves, glutes; fewer injuries.</td></tr>
+      <tr><td><b>Tue</b></td><td><span class="chip t-q">Workout</span> Hills, tempo or intervals</td><td>Raises your threshold so 9:00 feels easier.</td></tr>
+      <tr><td><b>Wed</b></td><td><span class="chip t-opt">Optional</span> Easy 3–5 mi</td><td>Extra aerobic volume. Regular from week 7 if you're handling it.</td></tr>
+      <tr><td><b>Thu</b></td><td><span class="chip t-mp">MP / easy</span> Marathon-pace or easy + strides</td><td>Teaches you what 9:00 feels like.</td></tr>
+      <tr><td><b>Fri</b></td><td><span class="chip t-str">Strength B</span> Upper + core</td><td>Posture and arm drive. No heavy leg work.</td></tr>
+      <tr><td><b>Sat</b></td><td><span class="chip t-long">Long run</span> 5 → 20 mi</td><td>The key run of the week. Practice fueling.</td></tr>
+      <tr><td><b>Sun</b></td><td><span class="chip t-rest">Rest</span> Off, walk or mobility</td><td>Adaptation happens when you recover.</td></tr>
+    </tbody>
+  </table></div>
+  <p class="note">Legs dead on Tuesdays? Move Strength A to Tuesday evening after the workout.</p>
+  <div class="phases">
+    <div class="phase"><div class="wk">Wk 1</div><h3>Recovery</h3><p>Bounce back from the half.</p></div>
+    <div class="phase"><div class="wk">Wk 2–7</div><h3>Base</h3><p>Easy volume to 26 mi. Strides, hills, strength foundation.</p></div>
+    <div class="phase"><div class="wk">Wk 8–13</div><h3>Build</h3><p>Tempo, intervals, first MP miles. Long run to 16.</p></div>
+    <div class="phase"><div class="wk">Wk 14–19</div><h3>Race-specific</h3><p>Tune-up half, MP long runs, two 20-milers.</p></div>
+    <div class="phase"><div class="wk">Wk 20–22</div><h3>Taper</h3><p>Volume drops, intensity stays. Carb load and race.</p></div>
+  </div>
+</section>
+
+<section id="strength">
+  <div class="sec-head"><div class="eyebrow">Mondays &amp; Fridays</div><h2>Strength</h2></div>
+  <p>Warm up 5 minutes. Work at about RPE 7–8, leaving 2–3 reps in the tank. When you hit the top of a rep range on every set, add weight next time. Cutback weeks use 2 sets.</p>
+  <div class="grid2">
+    <div class="panel">
+      <h3>A · Lower body + core</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Exercise</th><th>Wk 2–7</th><th>Wk 8–19</th></tr></thead>
+        <tbody>
+          <tr><td>Back squat or goblet squat</td><td class="num">3×8–10</td><td class="num">3×5 heavier</td></tr>
+          <tr><td>Romanian deadlift</td><td class="num">3×8–10</td><td class="num">3×6</td></tr>
+          <tr><td>Bulgarian split squat</td><td class="num">3×8/leg</td><td class="num">2×8/leg</td></tr>
+          <tr><td>Hip thrust or glute bridge</td><td class="num">3×10</td><td class="num">2×10</td></tr>
+          <tr><td>Calf raise, straight knee</td><td class="num">3×12–15</td><td class="num">3×10 single-leg</td></tr>
+          <tr><td>Calf raise, bent knee</td><td class="num">3×12–15</td><td class="num">3×12</td></tr>
+          <tr><td>Box jump (step down)</td><td class="num">n/a</td><td class="num">3×5</td></tr>
+          <tr><td>Pogo hops</td><td class="num">n/a</td><td class="num">3×20</td></tr>
+          <tr><td>Dead bug → Pallof press</td><td class="num">3×10/side</td><td class="num">3×10/side</td></tr>
+          <tr><td>Side plank → Copenhagen plank</td><td class="num">3×30 s</td><td class="num">3×20 s</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="panel">
+      <h3>B · Upper body + core</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Exercise</th><th>All phases</th></tr></thead>
+        <tbody>
+          <tr><td>DB bench press or push-ups</td><td class="num">3×8–12</td></tr>
+          <tr><td>Pull-ups (assisted OK) or lat pulldown</td><td class="num">3×6–10</td></tr>
+          <tr><td>One-arm DB row</td><td class="num">3×10/side</td></tr>
+          <tr><td>Half-kneeling DB overhead press</td><td class="num">3×8/side</td></tr>
+          <tr><td>Face pulls or band pull-aparts</td><td class="num">3×15</td></tr>
+          <tr><td>Farmer carry</td><td class="num">3×40 m</td></tr>
+          <tr><td>Plank</td><td class="num">3×45 s</td></tr>
+          <tr><td>Bird dog</td><td class="num">3×8/side</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+</section>
+
+<section id="nutrition">
+  <div class="sec-head"><div class="eyebrow">Fuel</div><h2>Nutrition</h2></div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>The basics</h3>
+      <ul class="list">
+        <li>Targets are a daily average for the week, set from your size, age and training load.</li>
+        <li><b>Protein</b> 130–135 g/day, split into 4 feedings of 30–40 g.</li>
+        <li><b>Fat</b> about 75–80 g/day. <b>Carbs</b> rise with mileage.</li>
+        <li>Fiber 30–38 g/day. Water about 3 L/day plus run fluids.</li>
+        <li>Weigh in 2× a week. Losing more than 1 lb/week for 2+ weeks, or feeling flat? Add 200 kcal, mostly carbs.</li>
+        <li>Want to lean out? In weeks 2–13 only, trim about 250 kcal on rest and lifting days, never protein. No deficit from week 14 on.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Flex carbs by day</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Day type</th><th>Carbs</th></tr></thead>
+        <tbody>
+          <tr><td>Rest or lifting only</td><td class="num">250–290 g</td></tr>
+          <tr><td>Easy run</td><td class="num">330–365 g</td></tr>
+          <tr><td>Workout (Tue/Thu)</td><td class="num">365–435 g</td></tr>
+          <tr><td>Long run day + day before</td><td class="num">435–580 g</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Long runs: start fueling 30–40 min in, then every 25–35 min. One gel ≈ 20–25 g carbs. Add 300–600 mg sodium per hour on runs over 90 min.</p>
+    </div>
+  </div>
+  <div class="panel">
+    <h3>Sample peak-week day · ~2,800 kcal</h3>
+    <ul class="list">
+      <li><b>Breakfast:</b> 1 cup oats in milk, banana, 1 tbsp peanut butter, 2 eggs (~750 kcal, 35 g protein).</li>
+      <li><b>Lunch:</b> Burrito bowl, 6 oz chicken, 1½ cups rice, beans, salsa, cheese (~800 kcal, 55 g).</li>
+      <li><b>Afternoon:</b> Greek yogurt, granola, berries (~350 kcal, 20 g).</li>
+      <li><b>Pre-run:</b> Toast with honey (~200 kcal).</li>
+      <li><b>Dinner:</b> 5 oz salmon, potatoes, roasted vegetables, olive oil (~700 kcal, 35 g).</li>
+    </ul>
+  </div>
+  <h3>Weekly targets</h3>
+  <div class="tbl"><table id="nutTable">
+    <thead><tr><th>Wk</th><th>Starts</th><th>Miles</th><th>kcal</th><th>Protein</th><th>Carbs</th><th>Fat</th><th>Long-run fuel</th></tr></thead>
+    <tbody></tbody>
+  </table></div>
+</section>
+
+<section id="race">
+  <div class="sec-head"><div class="eyebrow">Saturday, April 17, 2027</div><h2>Race day</h2></div>
+  <div class="grid2">
+    <div class="panel">
+      <h3>Fuel</h3>
+      <ul class="list">
+        <li><b>Thu–Fri:</b> Carb load, 580–725 g carbs/day. Low fiber and fat: white rice, bagels, pasta, peeled potatoes, juice, pretzels.</li>
+        <li><b>Friday dinner:</b> Familiar carb-heavy meal, done by 7 pm.</li>
+        <li><b>3 hours before:</b> About 150 g carbs: 2 bagels with jam, a banana, 16 oz sports drink.</li>
+        <li><b>During:</b> Gel at miles 3.5, 7, 10.5, 14, 17.5, 21, 24.5 plus sports drink sips. About 60–75 g carbs/hour.</li>
+      </ul>
+    </div>
+    <div class="panel">
+      <h3>Pacing</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Segment</th><th>Pace</th></tr></thead>
+        <tbody>
+          <tr><td>Miles 1–3</td><td class="num">9:10–9:15</td></tr>
+          <tr><td>Miles 4–20</td><td class="num">8:55–9:05</td></tr>
+          <tr><td>Miles 21–26.2</td><td>Hold 9:00, then empty the tank</td></tr>
+        </tbody>
+      </table></div>
+      <div class="tbl"><table>
+        <thead><tr><th>5K</th><th>10K</th><th>Half</th><th>20 mi</th><th>Finish</th></tr></thead>
+        <tbody><tr><td class="num">27:58</td><td class="num">55:55</td><td class="num">1:57:59</td><td class="num">3:00:00</td><td class="num">3:55:58</td></tr></tbody>
+      </table></div>
+      <p class="note">GPS usually measures long. Aim for about 8:55 on your watch.</p>
+    </div>
+  </div>
+</section>
+
+<section id="rules">
+  <div class="sec-head"><div class="eyebrow">Real life happens</div><h2>Adjusting</h2></div>
+  <ul class="list">
+    <li><b>Missed a run?</b> Skip it; don't stack it. Priority: Saturday, Thursday, Tuesday, Wednesday.</li>
+    <li><b>Only 3 days?</b> Drop Wednesday.</li>
+    <li><b>Long run won't fit Saturday?</b> Sunday works. Rest Monday and move Strength A to Tuesday evening.</li>
+    <li><b>Pain:</b> Stop if it's sharp, changes your stride, or worsens as you run. Take 2–3 days off. Lasts over a week? See a physical therapist or sports doctor.</li>
+    <li><b>Sick:</b> Above-the-neck symptoms, easy run is fine. Fever or chest symptoms, rest.</li>
+    <li><b>Shoes:</b> Replace around 300–500 mi.</li>
+    <li><b>Fitness check:</b> Monthly, note your easy pace at HR ~150. It should drop toward ~9:45 by March.</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Training and nutrition guidance only, not medical advice. Check-offs are saved on this phone only.</p>
+  <div><button type="button" class="danger" id="reset">Clear all check-offs</button></div>
+</footer>
+</div>
+
+<nav class="tabbar" aria-label="Sections">
+  <a href="#today">Today</a><a href="#weeks">Weeks</a><a href="#paces">Paces</a><a href="#strength">Lift</a><a href="#nutrition">Fuel</a>
+</nav>
+
+<script>
+(function(){
+  var SA1=["str","Strength A · Lower + core","Base block, 3×8–10: squat, RDL, split squat, hip thrust, calf raises, core."];
+  var SA2=["str","Strength A · Lower + power","Build block: squat 3×5, RDL 3×6, split squat, weighted calf raises, box jumps, pogo hops, core."];
+  var SAC=["str","Strength A · Light","Cutback week: 2 sets of each at your usual loads."];
+  var SB=["str","Strength B · Upper + core","3×8–12: press, pull-ups, rows, overhead press, pull-aparts, carries, plank."];
+  var SUN=["rest","Rest","Off, or a 30–45 min walk and mobility."];
+  function opt(mi,extra){return ["opt",mi+" mi easy (optional)",extra||"Your 4th run. Skip it if you feel run-down."];}
+
+  var W=[
+   {ph:"Recovery",focus:"Recover from the Nov 14 half",mi:"11",lr:5,
+    d:[["rest","Rest","Two days after the half. Walk and foam roll."],
+       ["easy","3 mi easy","Very relaxed, HR ≤ 150. Stop if anything hurts."],
+       ["rest","Mobility","20 min for hips, calves and upper back. No run."],
+       ["easy","3 mi easy","Conversational. Add 2 strides if your legs feel fresh."],
+       ["str","Intro strength","Bodyweight only, 2×10: squats, glute bridges, push-ups, rows, calf raises, plank. Learn the movements."],
+       ["long","5 mi easy","10:15–11:00/mi. First long run back, keep it boring."],SUN],
+    n:[2400,130,300,75,"Water only","Log everything you eat for 3 days without changing anything. That's your baseline."]},
+   {ph:"Base",focus:"Start building, first loaded lifts",mi:"15–18",lr:7,
+    d:[["str","Strength A · Lower + core","First loaded session. Pick weights you could lift 12+ times and do 3×8–10."],
+       ["easy","4 mi easy + strides","Finish with 4×20 s strides: quick, relaxed, walk back to recover."],
+       opt(3),
+       ["easy","4 mi easy","Thanksgiving. Run before the meal. A turkey trot at easy effort counts."],
+       SB,["long","7 mi long","Easy, 10:15–10:45/mi, HR ≤ 155."],SUN],
+    n:[2500,130,325,75,"Water only","Protein at every meal: 30–40 g at breakfast, lunch and dinner plus a snack. Enjoy Thanksgiving."]},
+   {ph:"Base",focus:"Easy volume",mi:"17–20",lr:8,
+    d:[SA1,["easy","5 mi easy + strides","6×20 s strides at the end."],opt(3),["easy","4 mi easy",""],SB,
+       ["long","8 mi long","Easy. Carry water if you'll be out over 75 min."],SUN],
+    n:[2500,130,325,75,"Water only","Hydration: about 3 L a day. Pale-yellow urine is the target."]},
+   {ph:"Base",focus:"Hills for strength",mi:"19–22",lr:9,
+    d:[SA1,["q","5 mi · hill repeats","1.5 mi easy warm-up · 6×60 s uphill at hard effort, jog down · easy to 5 mi."],opt(3),
+       ["easy","5 mi easy + strides","4×20 s strides at the end."],SB,["long","9 mi long","Easy. Practice drinking on the run."],SUN],
+    n:[2550,130,330,80,"Water only","Produce: 5+ servings a day. Fill half your plate with fruit and vegetables at lunch and dinner."]},
+   {ph:"Base",focus:"First fartlek, first fuel practice",mi:"20–24",lr:10,
+    d:[SA1,["q","5 mi · fartlek","1.5 mi warm-up · 8×1 min hard / 1 min easy · cool down."],opt(4),["easy","5 mi easy",""],SB,
+       ["long","10 mi long","Easy. First fueling practice: one gel (~25 g carbs) at mile 5."],SUN],
+    n:[2550,130,330,80,"30 g/hr","Eat 30–60 g carbs 60–90 min before workouts, like a banana and toast."]},
+   {ph:"Base · cutback",focus:"Absorb the work, Christmas week",mi:"16–19",lr:8,
+    d:[SAC,["easy","4 mi easy + strides","6×20 s strides."],opt(3),["easy","4 mi easy",""],
+       ["str","Strength B (flexible)","Christmas Day. Do it Thursday instead, or skip it this week."],
+       ["long","8 mi long","Easy. Cutback week."],SUN],
+    n:[2500,130,325,75,"30 g/hr","Holiday week: aim for 80/20. Keep protein steady and don't skip breakfast before the long run."]},
+   {ph:"Base",focus:"First taste of marathon pace",mi:"22–26",lr:11,
+    d:[SA1,["q","6 mi · hill repeats","1.5 mi warm-up · 8×60 s uphill hard, jog down · easy to 6 mi."],
+       opt(4,"From here on, make this a regular run if your body is handling the load."),
+       ["mp","5 mi · last mile at MP","4 mi easy, then 1 mi at 9:20."],SB,
+       ["long","11 mi long","Easy. Gels at miles 4 and 8."],SUN],
+    n:[2600,130,340,80,"30–45 g/hr","Recover within 60 min of every run: 25–30 g protein + about 70 g carbs. Chocolate milk and a bagel works."]},
+   {ph:"Build",focus:"Tempo work begins",mi:"24–28",lr:12,
+    d:[SA2,["q","6 mi · tempo intervals","1.5 mi warm-up · 2×10 min at tempo (≈8:45) with 3 min jog · cool down."],opt(4),
+       ["mp","6 mi · 2 at MP","2 easy · 2 at 9:15 · 2 easy."],SB,["long","12 mi long","Easy. 45 g carbs per hour."],SUN],
+    n:[2650,130,355,80,"45 g/hr","Meal prep twice a week (Sun + Wed): a batch of protein, a grain and roasted vegetables."]},
+   {ph:"Build",focus:"First 800s",mi:"25–29",lr:13,
+    d:[SA2,["q","6 mi · 800 m repeats","1.5 mi warm-up · 5×800 m at ≈4:00 each with 400 m jog · cool down."],opt(4),
+       ["easy","6 mi easy + strides","6×20 s strides."],SB,["long","13 mi long","11 easy, last 2 at 9:15."],SUN],
+    n:[2650,130,355,80,"45 g/hr","Whole-food carbs at most meals: oats, rice, potatoes, fruit, bread. Save sugary stuff for around runs."]},
+   {ph:"Build · cutback",focus:"Recover and consolidate",mi:"20–23",lr:10,
+    d:[SAC,["q","5 mi · tempo","1.5 mi warm-up · 15 min steady at tempo (≈8:45) · cool down."],opt(3),["easy","5 mi easy",""],SB,
+       ["long","10 mi long","Easy. Cutback week."],SUN],
+    n:[2550,130,330,80,"45 g/hr","Iron and calcium: red meat 2× a week or beans with vitamin C, plus dairy or fortified foods. Ask your doctor about a ferritin and vitamin D check."]},
+   {ph:"Build",focus:"Switch to goal paces",mi:"27–31",lr:14,
+    d:[SA2,["q","7 mi · mile repeats","1.5 mi warm-up · 4×1 mi at tempo (8:30) with 2 min jog · cool down."],opt(4),
+       ["mp","6 mi · 3 at MP","1.5 easy · 3 at 9:05 · 1.5 easy."],SB,["long","14 mi long","Easy. 60 g carbs per hour from here on."],SUN],
+    n:[2700,130,365,80,"60 g/hr","Carb flexing: add 75–100 g carbs on Friday and Saturday, drop about 50 g on rest days."]},
+   {ph:"Build",focus:"First 4 miles at 9:00",mi:"29–34",lr:15,
+    d:[SA2,["q","7 mi · 800 m repeats","1.5 mi warm-up · 6×800 m at 3:52–3:58 with 400 m jog · cool down."],opt(5),
+       ["mp","7 mi · 4 at MP","1.5 easy · 4 at 9:00 · 1.5 easy."],SB,["long","15 mi long","Easy."],SUN],
+    n:[2700,130,365,80,"60 g/hr","Alcohol: 3 drinks a week at most, and none the night before a long run."]},
+   {ph:"Build",focus:"Continuous tempo, MP finish",mi:"29–34",lr:16,
+    d:[SA2,["q","7 mi · continuous tempo","1.5 mi warm-up · 3 mi at 8:25–8:30 · easy to 7 mi."],opt(5),
+       ["easy","6 mi easy + strides",""],SB,["long","16 mi long","13 easy, last 3 at 9:00."],SUN],
+    n:[2700,130,365,80,"60 g/hr","Sleep 7.5–9 hours. Have 20–30 g protein before bed, like Greek yogurt or cottage cheese."]},
+   {ph:"Race-specific · cutback",focus:"Tune-up half: Checkpoint 2",mi:"22–25",lr:13.1,
+    d:[SAC,["mp","5 mi · MP sharpener","1.5 easy · 2×1 mi at 9:00 with 2 min jog · easy to 5."],opt(3),
+       ["easy","4 mi easy + strides","4×20 s strides."],
+       ["rest","Rest","Skip Strength B this week. Lay out race gear."],
+       ["race","Tune-up half marathon","Race a local half or run a solo 13.1 time trial at even effort. The result sets your marathon goal pace."],
+       ["rest","Rest","Easy walk."]],
+    n:[2600,130,340,80,"60 g/hr (in race)","Race-morning rehearsal: breakfast 2.5–3 h before, 100–140 g carbs, low fiber and fat."]},
+   {ph:"Race-specific",focus:"Recover from tune-up, 17-miler",mi:"30–35",lr:17,
+    d:[["str","Strength A · Light","Two days after the race: 2 sets at moderate loads."],
+       ["easy","6 mi easy + strides","Recovery from the tune-up. No workout this week."],opt(5),
+       ["mp","7 mi · 4 at goal pace","1.5 easy · 4 at goal pace · 1.5 easy."],SB,
+       ["long","17 mi long","Easy, 10:00–10:45. 60–75 g carbs per hour."],SUN],
+    n:[2750,135,375,80,"60–75 g/hr","Sweat test: weigh yourself before and after a long run. Each lb lost is about 16 oz of fluid you should aim to drink during a run that long."]},
+   {ph:"Race-specific",focus:"MP blocks in the long run",mi:"33–38",lr:18,
+    d:[SA2,["q","8 mi · tempo","1.5 mi warm-up · 2×2 mi at 8:25–8:30 with 3 min jog · cool down."],opt(5),
+       ["easy","7 mi easy",""],SB,["long","18 mi · MP blocks","10 easy · 3 at goal pace · 1 easy · 3 at goal pace · 1 easy."],SUN],
+    n:[2800,135,385,80,"60–75 g/hr","Lock in race fuel. Find out what's served on course and train with it, or carry your own. Test a caffeine gel."]},
+   {ph:"Race-specific",focus:"Peak week, first 20",mi:"35–40",lr:20,
+    d:[SA2,["q","7 mi · 1 km repeats","1.5 mi warm-up · 5×1 km at 4:45–4:50 (7:45/mi) with 400 m jog · cool down."],opt(5),
+       ["mp","8 mi · 5 at goal pace","1.5 easy · 5 at goal pace · 1.5 easy."],SB,
+       ["long","20 mi long","First 20. All easy (10:15–10:45). Full race fueling."],SUN],
+    n:[2800,135,385,80,"60–75 g/hr","Peak week: eat to hunger and don't diet. Extra carbs Friday and Saturday."]},
+   {ph:"Race-specific · cutback",focus:"Absorb the 20",mi:"26–30",lr:14,
+    d:[SAC,["q","6 mi · mile repeats","1.5 mi warm-up · 3×1 mi at 8:25–8:30 · cool down."],opt(4),
+       ["easy","6 mi easy + strides",""],SB,["long","14 mi · 6 at goal pace","5 easy · 6 at goal pace · 3 easy."],SUN],
+    n:[2650,130,355,80,"60 g/hr","Recovery foods: fatty fish twice this week, berries, colorful vegetables."]},
+   {ph:"Race-specific",focus:"Dress rehearsal 20",mi:"34–39",lr:20,
+    d:[["str","Strength A · Lower + power","Last heavy lower-body session of the block."],
+       ["q","7 mi · mile repeats","1.5 mi warm-up · 4×1 mi at 8:25 with 2 min jog · cool down."],opt(5),
+       ["easy","7 mi easy + strides",""],SB,
+       ["long","20 mi · dress rehearsal","12 easy · 6 at goal pace · 2 easy. Race breakfast, race shoes, race fuel."],SUN],
+    n:[2800,135,385,80,"60–75 g/hr","Full rehearsal: exact race breakfast, a gel every 30–35 min, same shoes and kit as race day."]},
+   {ph:"Taper",focus:"Volume down, sharpness stays",mi:"26–30",lr:14,
+    d:[["str","Strength A · Taper","2 sets at about 60% of your usual load. No plyos."],
+       ["q","6 mi · mile repeats","1.5 mi warm-up · 3×1 mi at 8:25 · cool down."],opt(4),
+       ["mp","6 mi · 4 at goal pace","1 easy · 4 at goal pace · 1 easy."],
+       ["str","Strength B · Taper","2 sets, moderate weights."],
+       ["long","14 mi long","12 easy, last 2 at goal pace."],SUN],
+    n:[2650,130,355,80,"60–75 g/hr","Taper eating: keep carbs high and protein steady. Gaining 1–2 lb of water is normal and useful."]},
+   {ph:"Taper",focus:"Last long run",mi:"20–23",lr:10,
+    d:[["str","Strength A · Last session","Bodyweight or light, 2×8. No new exercises."],
+       ["q","5 mi · tempo","1.5 mi warm-up · 2×1 mi at 8:25 with 3 min jog · cool down."],opt(3),
+       ["mp","5 mi · 3 at goal pace","1 easy · 3 at goal pace · 1 easy."],
+       ["str","Strength B · Light","2 sets, upper body only. Or rest."],
+       ["long","10 mi · 4 at goal pace","5 easy · 4 at goal pace · 1 easy."],SUN],
+    n:[2550,130,330,80,"60–75 g/hr","Write your carb-load menu and grocery list. Try a lower-fiber dinner Friday night."]},
+   {ph:"Race week",focus:"Carb load and race",mi:"8 + race",lr:26.2,
+    d:[["rest","Rest + mobility","No lifting this week."],
+       ["mp","5 mi · race-pace check","2 easy · 2×1 mi at goal pace with 1 min jog · 1 easy."],
+       ["rest","Rest",""],
+       ["easy","3 mi easy + strides","4×20 s strides. Carb load starts today."],
+       ["rest","Rest or 15 min shakeout","Carb load day 2. Lay out bib, gels and shoes. In bed early."],
+       ["race","RACE · 26.2 mi","Goal 3:55:58 (9:00/mi). See the race-day plan."],
+       ["rest","Recovery","Walk, eat, celebrate. No running for 5–7 days."]],
+    n:["2,500 → 3,300–3,600",130,"330 → 580–725",75,"60–75 g/hr","Mon–Wed eat normally. Thu–Fri carb load at 8–10 g/kg with low fiber and fat. Race breakfast 3 h before."]}
+  ];
+
+  var DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  var LABEL={easy:"Easy",opt:"Optional",mp:"MP",q:"Workout",long:"Long",str:"Strength",rest:"Rest",race:"Race"};
+  var KEY="marathon-plan-done-v1";
+  function dt(n,off){return new Date(2026,10,16+(n-1)*7+off);}
+  function fmt(d){return MON[d.getMonth()]+" "+d.getDate();}
+  function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+  function num(v){return typeof v==="number"?v.toLocaleString("en-US"):v;}
+  function k(n,j){return "w"+n+"d"+j;}
+
+  var done={};
+  try{done=JSON.parse(localStorage.getItem(KEY))||{};}catch(e){done={};}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(done));}catch(e){}}
+
+  var today=new Date(); today.setHours(0,0,0,0);
+  var start=dt(1,0);
+  function ref(d){var diff=Math.round((d-start)/864e5); if(diff<0||diff>=154)return null; return {n:Math.floor(diff/7)+1,j:diff%7};}
+  var now=ref(today);
+  var cur=now?now.n:0;
+
+  function box(n,j,id){
+    var kk=k(n,j);
+    return '<label class="check" aria-label="Mark '+DAYS[j]+' week '+n+' done"><input type="checkbox" id="'+id+'" data-k="'+kk+'"'+(done[kk]?' checked':'')+'></label>';
+  }
+  function trainable(n){var c=0;W[n-1].d.forEach(function(d){if(d[0]!=="rest")c++;});return c;}
+  function doneCount(n){var c=0;W[n-1].d.forEach(function(d,j){if(d[0]!=="rest"&&done[k(n,j)])c++;});return c;}
+
+  /* weeks */
+  var html="";
+  W.forEach(function(w,i){
+    var n=i+1, s=dt(n,0), e=dt(n,6);
+    var days=w.d.map(function(d,j){
+      var dd=dt(n,j), kk=k(n,j);
+      return '<div class="day'+(done[kk]?' done':'')+'" data-row="'+kk+'"><div class="dlabel"><b>'+DAYS[j]+'</b>'+fmt(dd)+'</div><div class="dtext"><div class="dtitle"><span class="chip t-'+d[0]+'">'+LABEL[d[0]]+'</span>'+esc(d[1])+'</div>'+(d[2]?'<div class="ddetail">'+esc(d[2])+'</div>':'')+'</div>'+(d[0]!=="rest"?box(n,j,"c-"+kk):'<span></span>')+'</div>';
+    }).join("");
+    var u=w.n;
+    html+='<details class="week'+(n===cur?' current':'')+'" id="w'+n+'"><summary>'+
+      '<div class="wnum"><small>WEEK</small>'+(n<10?'0':'')+n+'</div>'+
+      '<div class="wmeta"><div class="dates">'+fmt(s)+' – '+fmt(e)+' <span class="muted">· '+esc(w.ph)+'</span></div><div class="focus">'+esc(w.focus)+'</div></div>'+
+      '<div class="wmiles"><b>'+w.mi+' mi</b><span>Long: '+w.lr+' mi</span><span class="prog" id="p'+n+'"></span></div></summary>'+
+      '<div class="wbody"><div class="days">'+days+'</div>'+
+      '<div class="fuel"><div class="eyebrow">Nutrition · daily average</div><div class="fuel-nums">'+
+      '<div><span>Calories</span><b>'+num(u[0])+'</b></div><div><span>Protein</span><b>'+u[1]+' g</b></div><div><span>Carbs</span><b>'+u[2]+' g</b></div><div><span>Fat</span><b>'+u[3]+' g</b></div><div><span>Long-run fuel</span><b>'+esc(u[4])+'</b></div></div>'+
+      '<p><b>Habit</b>'+esc(u[5])+'</p></div></div></details>';
+  });
+  document.getElementById("weekList").innerHTML=html;
+
+  /* nutrition table */
+  var rows="";
+  W.forEach(function(w,i){
+    var n=i+1,u=w.n;
+    rows+='<tr><td class="num"><a href="#w'+n+'" data-w="'+n+'">'+n+'</a></td><td class="num">'+fmt(dt(n,0))+'</td><td class="num">'+w.mi+'</td><td class="num">'+num(u[0])+'</td><td class="num">'+u[1]+' g</td><td class="num">'+u[2]+' g</td><td class="num">'+u[3]+' g</td><td class="num">'+esc(u[4])+'</td></tr>';
+  });
+  document.querySelector("#nutTable tbody").innerHTML=rows;
+
+  /* today */
+  var TOTAL=0; for(var t=1;t<=22;t++)TOTAL+=trainable(t);
+  function allDone(){var c=0;for(var t=1;t<=22;t++)c+=doneCount(t);return c;}
+  function sessionLine(r){var d=W[r.n-1].d[r.j];return '<span class="chip t-'+d[0]+'">'+LABEL[d[0]]+'</span> '+esc(d[1]);}
+  function renderToday(){
+    var el=document.getElementById("today"), h="";
+    var label=WD[today.getDay()]+", "+fmt(today);
+    var race=new Date(2027,3,17);
+    if(today<start){
+      var dl=Math.round((start-today)/864e5);
+      h='<div class="eyebrow">Today · '+label+'</div><div class="today"><h2>Plan starts Monday, Nov 16</h2><p>'+dl+' day'+(dl===1?'':'s')+' to go. Race your half on Nov 14, then check your time against Checkpoint 1.</p><div class="row"><a class="btn" href="#w1" data-w="1">Preview week 1</a><a class="btn" href="#start">Checkpoints</a></div></div>';
+    } else if(!now){
+      h='<div class="eyebrow">Today · '+label+'</div><div class="today"><h2>Block complete</h2><p>Race day was April 17. '+allDone()+' of '+TOTAL+' sessions checked off.</p></div>';
+    } else {
+      var d=W[now.n-1].d[now.j];
+      var tom=ref(new Date(today.getFullYear(),today.getMonth(),today.getDate()+1));
+      var togo=Math.round((race-today)/864e5);
+      var pct=Math.round(allDone()/TOTAL*100);
+      h='<div class="eyebrow">Today · '+label+' · Week '+now.n+', '+DAYS[now.j]+'</div><div class="today">'+
+        '<div class="row" style="justify-content:space-between;flex-wrap:nowrap;align-items:flex-start"><div style="display:grid;gap:6px;min-width:0"><span><span class="chip t-'+d[0]+'">'+LABEL[d[0]]+'</span></span><h2>'+esc(d[1])+'</h2></div>'+(d[0]!=="rest"?box(now.n,now.j,"c-today"):'')+'</div>'+
+        (d[2]?'<p>'+esc(d[2])+'</p>':'')+
+        (tom?'<div class="next"><div class="eyebrow">Tomorrow</div><div>'+sessionLine(tom)+'</div></div>':'')+
+        '<div class="next"><div class="eyebrow">Block progress · '+allDone()+' of '+TOTAL+' sessions · '+togo+' days to race</div><div class="bar"><i style="width:'+pct+'%"></i></div></div>'+
+        '<div class="row"><a class="btn" href="#w'+now.n+'" data-w="'+now.n+'">Open week '+now.n+'</a></div></div>';
+    }
+    el.innerHTML=h;
+  }
+  function renderProg(){for(var n=1;n<=22;n++){document.getElementById("p"+n).textContent=doneCount(n)+"/"+trainable(n)+" done";}}
+  renderToday(); renderProg();
+
+  var openW=document.getElementById("w"+(cur||1)); if(openW) openW.open=true;
+
+  document.addEventListener("change",function(ev){
+    var t=ev.target; if(!t.matches||!t.matches("input[data-k]"))return;
+    var kk=t.getAttribute("data-k");
+    if(t.checked)done[kk]=1; else delete done[kk];
+    save();
+    document.querySelectorAll('input[data-k="'+kk+'"]').forEach(function(x){x.checked=t.checked;});
+    var row=document.querySelector('[data-row="'+kk+'"]'); if(row)row.classList.toggle("done",t.checked);
+    renderProg();
+    if(t.id!=="c-today")renderToday(); else {var keep=document.activeElement; renderToday(); var nb=document.getElementById("c-today"); if(nb&&keep===t)nb.focus();}
+  });
+  document.addEventListener("click",function(ev){
+    var a=ev.target.closest&&ev.target.closest("a[data-w]");
+    if(a){var d=document.getElementById("w"+a.getAttribute("data-w")); if(d)d.open=true;}
+  });
+  document.getElementById("openAll").addEventListener("click",function(){document.querySelectorAll("details.week").forEach(function(d){d.open=true;});});
+  document.getElementById("closeAll").addEventListener("click",function(){document.querySelectorAll("details.week").forEach(function(d){d.open=false;});});
+  var rb=document.getElementById("reset"), armed=false, timer;
+  rb.addEventListener("click",function(){
+    if(!armed){armed=true;rb.textContent="Tap again to clear everything";timer=setTimeout(function(){armed=false;rb.textContent="Clear all check-offs";},4000);return;}
+    clearTimeout(timer); armed=false; done={}; save();
+    document.querySelectorAll("input[data-k]").forEach(function(x){x.checked=false;});
+    document.querySelectorAll(".day.done").forEach(function(r){r.classList.remove("done");});
+    renderProg(); renderToday(); rb.textContent="Cleared";
+    setTimeout(function(){rb.textContent="Clear all check-offs";},2000);
+  });
+
+  if("serviceWorker" in navigator && location.protocol.indexOf("http")===0){
+    window.addEventListener("load",function(){navigator.serviceWorker.register("sw.js").catch(function(){});});
+  }
+})();
+</script>
+</body>
+</html>
