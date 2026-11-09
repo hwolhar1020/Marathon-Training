@@ -1,5 +1,5 @@
 // Offline support. Bump VERSION whenever you upload changed files.
-const VERSION = "marathon-v1";
+const VERSION = "marathon-v2";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", (e) => {

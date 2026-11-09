@@ -26,6 +26,7 @@
   --str:#6246A8; --str-soft:#EEE8F8;
   --rest:#6E7888; --rest-soft:#EDEFF3;
   --race:#B8322A; --race-soft:#FBE4E1;
+  --ride:#0E7486; --ride-soft:#DCF0F3;
   --f-display:"Avenir Next Condensed","Barlow Condensed","Arial Narrow","Roboto Condensed",sans-serif;
   --f-body:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   --f-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -42,6 +43,7 @@
     --str:#B39CF2; --str-soft:#2A2246;
     --rest:#9AA5B5; --rest-soft:#1F2631;
     --race:#F27A6E; --race-soft:#3D1D1A;
+    --ride:#5FCFDD; --ride-soft:#13313A;
     color-scheme:dark;
   }
 }
@@ -98,6 +100,7 @@ ul.list{margin:0;padding-left:1.1em;display:grid;gap:6px}
 .t-str{background:var(--str-soft);color:var(--str)}
 .t-rest{background:var(--rest-soft);color:var(--rest)}
 .t-race{background:var(--race-soft);color:var(--race)}
+.t-ride{background:var(--ride-soft);color:var(--ride)}
 .legend{display:flex;flex-wrap:wrap;gap:8px}
 .phases{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,170px),1fr));gap:10px}
 .phase{background:var(--surface);border:1px solid var(--line);border-radius:6px;padding:14px;display:grid;gap:4px;align-content:start}
@@ -178,7 +181,7 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--line);padd
 <section id="weeks">
   <div class="sec-head"><div class="eyebrow">22 weeks · tap a week to open it</div><h2>Week by week</h2></div>
   <div class="legend" aria-label="Session types">
-    <span class="chip t-easy">Easy</span><span class="chip t-opt">Optional</span><span class="chip t-q">Workout</span><span class="chip t-mp">Marathon pace</span><span class="chip t-long">Long run</span><span class="chip t-str">Strength</span><span class="chip t-rest">Rest</span><span class="chip t-race">Race</span>
+    <span class="chip t-easy">Easy</span><span class="chip t-opt">Optional</span><span class="chip t-q">Workout</span><span class="chip t-mp">Marathon pace</span><span class="chip t-long">Long run</span><span class="chip t-str">Strength</span><span class="chip t-rest">Rest</span><span class="chip t-race">Race</span><span class="chip t-ride">Snowboard</span>
   </div>
   <div class="controls"><button type="button" id="openAll">Expand all</button><button type="button" id="closeAll">Collapse all</button></div>
   <div class="weeks" id="weekList"></div>
@@ -462,13 +465,19 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--line);padd
     d:[SA2,["q","7 mi · mile repeats","1.5 mi warm-up · 4×1 mi at tempo (8:30) with 2 min jog · cool down."],opt(4),
        ["mp","6 mi · 3 at MP","1.5 easy · 3 at 9:05 · 1.5 easy."],SB,["long","14 mi long","Easy. 60 g carbs per hour from here on."],SUN],
     n:[2700,130,365,80,"60 g/hr","Carb flexing: add 75–100 g carbs on Friday and Saturday, drop about 50 g on rest days."]},
-   {ph:"Build",focus:"First 4 miles at 9:00",mi:"29–34",lr:15,
-    d:[SA2,["q","7 mi · 800 m repeats","1.5 mi warm-up · 6×800 m at 3:52–3:58 with 400 m jog · cool down."],opt(5),
-       ["mp","7 mi · 4 at MP","1.5 easy · 4 at 9:00 · 1.5 easy."],SB,["long","15 mi long","Easy."],SUN],
-    n:[2700,130,365,80,"60 g/hr","Alcohol: 3 drinks a week at most, and none the night before a long run."]},
-   {ph:"Build",focus:"Continuous tempo, MP finish",mi:"29–34",lr:16,
-    d:[SA2,["q","7 mi · continuous tempo","1.5 mi warm-up · 3 mi at 8:25–8:30 · easy to 7 mi."],opt(5),
-       ["easy","6 mi easy + strides",""],SB,["long","16 mi long","13 easy, last 3 at 9:00."],SUN],
+   {ph:"Build · snowboard week",focus:"Snowboarding Fri–Sat, Feb 5–6",mi:"17",lr:10,
+    d:[["str","Strength B · Upper + core","Moved from Friday. Skip Strength A this week; snowboarding covers your legs."],
+       ["q","7 mi · 800 m repeats","1.5 mi warm-up · 6×800 m at 3:52–3:58 with 400 m jog · cool down."],
+       ["mp","10 mi · last 3 at MP","7 easy · 3 at 9:00. Replaces Saturday's long run and Thursday's MP run."],
+       ["rest","Rest or travel","Fresh legs for the mountain."],
+       ["ride","Snowboard","Eat like a long-run day: about 3,000–3,300 kcal and 400 g carbs. Snacks in your pocket, water every lift ride or two."],
+       ["ride","Snowboard","Take the first runs easy; tired legs fall more. Wrist guards."],
+       ["rest","Rest","A 2–3 mi shakeout is fine if your legs feel OK."]],
+    n:[2700,130,365,80,"60 g/hr (Wed run)","Ride days: about 3,000–3,300 kcal with 400 g carbs, protein steady at 130 g. Alcohol: 3 drinks a week at most."]},
+   {ph:"Build",focus:"Back from the mountain, MP finish",mi:"28–33",lr:15,
+    d:[["str","Strength A · Light","Legs are still recovering from riding: 2 sets at your usual loads."],
+       ["q","7 mi · continuous tempo","1.5 mi warm-up · 3 mi at 8:25–8:30 · easy to 7 mi. Quads still sore? Move this to Wednesday."],opt(5),
+       ["easy","6 mi easy + strides",""],SB,["long","15 mi long","12 easy, last 3 at 9:00. Repeats the distance you skipped in week 12."],SUN],
     n:[2700,130,365,80,"60 g/hr","Sleep 7.5–9 hours. Have 20–30 g protein before bed, like Greek yogurt or cottage cheese."]},
    {ph:"Race-specific · cutback",focus:"Tune-up half: Checkpoint 2",mi:"22–25",lr:13.1,
     d:[SAC,["mp","5 mi · MP sharpener","1.5 easy · 2×1 mi at 9:00 with 2 min jog · easy to 5."],opt(3),
@@ -530,7 +539,7 @@ footer{font-size:.86rem;color:var(--muted);border-top:1px solid var(--line);padd
   var DAYS=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
   var MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   var WD=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  var LABEL={easy:"Easy",opt:"Optional",mp:"MP",q:"Workout",long:"Long",str:"Strength",rest:"Rest",race:"Race"};
+  var LABEL={easy:"Easy",opt:"Optional",mp:"MP",q:"Workout",long:"Long",str:"Strength",rest:"Rest",race:"Race",ride:"Snowboard"};
   var KEY="marathon-plan-done-v1";
   function dt(n,off){return new Date(2026,10,16+(n-1)*7+off);}
   function fmt(d){return MON[d.getMonth()]+" "+d.getDate();}
